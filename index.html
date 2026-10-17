@@ -21,7 +21,7 @@
             <i class="fa-solid fa-tags text-indigo-600"></i> Active Promo Codes & Offers
         </h2>
         
-        <!-- Promos Container (Yeh automatic load hoga) -->
+        <!-- Promos Container -->
         <div id="promos-list" class="space-y-4">
             <!-- JavaScript will load promos here automatically -->
         </div>
@@ -31,7 +31,7 @@
     <script>
         async function loadPromos() {
             try {
-                let response = await fetch('promos.json');
+                let response = await fetch('promo-codes.json');
                 let promos = await response.json();
                 let container = document.getElementById('promos-list');
                 
