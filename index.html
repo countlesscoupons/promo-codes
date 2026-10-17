@@ -10,71 +10,62 @@
 <body class="bg-gray-50 font-sans">
 
     <!-- Header -->
-    <header class="bg-indigo-600 text-white p-5 text-center shadow-md">
-        <h1 class="text-2xl font-bold">🏷️ CountlessCoupons</h1>
-        <p class="text-sm text-indigo-200 mt-1">Verified Coupon Codes & Exclusive Deals</p>
+    <header class="bg-indigo-600 text-white p-6 text-center shadow-md">
+        <h1 class="text-3xl font-bold">🏷️ CountlessCoupons</h1>
+        <p class="text-sm text-indigo-200 mt-1">Verified Promo Codes, Vouchers & Exclusive Store Deals</p>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-3xl mx-auto my-8 p-4">
-        <h2 class="text-xl font-bold mb-6 text-gray-800">Latest Active Offers</h2>
+    <main class="max-w-4xl mx-auto my-10 p-4">
+        <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-tags text-indigo-600"></i> Active Promo Codes & Offers
+        </h2>
         
-        <!-- Coupons Container -->
-        <div id="coupon-list" class="space-y-4">
-            <!-- JavaScript will load coupons here automatically -->
+        <!-- Promos Container (Yeh automatic load hoga) -->
+        <div id="promos-list" class="space-y-4">
+            <!-- JavaScript will load promos here automatically -->
         </div>
     </main>
 
-    <!-- Script to Load Coupons Dynamically -->
+    <!-- Script to Load Promo Codes Dynamically -->
     <script>
-        async function loadCoupons() {
+        async function loadPromos() {
             try {
-                let response = await fetch('coupons.json');
-                let coupons = await response.json();
-                let container = document.getElementById('coupon-list');
+                let response = await fetch('promos.json');
+                let promos = await response.json();
+                let container = document.getElementById('promos-list');
                 
                 container.innerHTML = "";
 
-                coupons.forEach(coupon => {
+                promos.forEach(promo => {
                     let card = document.createElement('div');
                     card.className = "bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row justify-between items-center transition hover:shadow-md";
 
-                    let actionButton = "";
-                    if (coupon.type === "code") {
-                        actionButton = `<button onclick="revealCode('${coupon.code}', '${coupon.affiliateUrl}')" 
-                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow flex items-center gap-2 text-sm">
-                            <i class="fa-solid fa-scissors"></i> Get Code
-                        </button>`;
-                    } else {
-                        actionButton = `<a href="${coupon.affiliateUrl}" target="_blank" 
-                                class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-md shadow inline-flex items-center gap-2 text-sm">
-                            Get Deal <i class="fa-solid fa-arrow-right"></i>
-                        </a>`;
-                    }
-
                     card.innerHTML = `
                         <div class="mb-4 md:mb-0">
-                            <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide">${coupon.store}</span>
-                            <h3 class="text-lg font-bold text-gray-800 mt-2">${coupon.title}</h3>
-                            <p class="text-sm text-gray-600 mt-1">${coupon.description}</p>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-0.5 rounded uppercase">${promo.storeName}</span>
+                                <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">${promo.badge}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 mt-1">${promo.title}</h3>
+                            <p class="text-sm text-gray-600 mt-1">${promo.description}</p>
                         </div>
-                        <div>${actionButton}</div>
+                        <div>
+                            <a href="${promo.slug}" 
+                               class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow inline-flex items-center gap-2 text-sm whitespace-nowrap">
+                                Get Code <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
                     `;
 
                     container.appendChild(card);
                 });
             } catch (error) {
-                console.error("Error loading coupons:", error);
+                console.error("Error loading promos:", error);
             }
         }
 
-        function revealCode(code, affiliateUrl) {
-            window.open(affiliateUrl, '_blank');
-            navigator.clipboard.writeText(code);
-            alert("Coupon Code Copied: " + code + "\nRedirecting to store...");
-        }
-
-        loadCoupons();
+        loadPromos();
     </script>
 </body>
 </html>
