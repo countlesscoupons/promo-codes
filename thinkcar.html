@@ -15,7 +15,7 @@
             <a href="index.html" class="text-xl font-bold flex items-center gap-2">
                 🏷️ CountlessCoupons
             </a>
-            <a href="index.html" class="text-sm bg-indigo-700 hover:bg-indigo-800 px-3 py-1.5 rounded-md">
+            <a href="index.html" class="text-sm bg-indigo-700 hover:bg-indigo-800 px-3 py-1.5 rounded-md transition">
                 <i class="fa-solid fa-house"></i> Home
             </a>
         </div>
@@ -24,12 +24,17 @@
     <!-- Store Header Section -->
     <div class="bg-white border-b border-gray-200 py-8">
         <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center gap-6">
-            <div class="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center font-bold text-xl text-gray-700 border">
+            <div class="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center font-bold text-xl text-gray-700 border shadow-sm">
                 Thinkcar
             </div>
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Thinkcar Promo Codes & Discount Code: COUNTLESS</h1>
-                <p class="text-sm text-gray-600 mt-1">Thinkcar Discount Code: <strong>COUNTLESS</strong> → 25% Off, 10% Off Sitewide & Extra $50 Off On All Orders. Best Diagnostic Tools & Car Scanner in Sale Price & FREE Shipping.</p>
+                
+                <!-- Dynamic Month & Year Text -->
+                <p class="text-sm text-gray-600 mt-1">
+                    Thinkcar Discount Code: <strong>COUNTLESS</strong> → 25% Off, 10% Off Sitewide & Extra \$50 Off On All Orders. Best Diagnostic Tools & Car Scanner in Sale Price & FREE Shipping In <span id="current-date-text" class="font-semibold text-indigo-600"></span>
+                </p>
+
                 <div class="mt-2 text-xs text-green-600 font-semibold flex items-center gap-1">
                     <i class="fa-solid fa-circle-check"></i> Verified & Active Coupon Code
                 </div>
@@ -42,30 +47,30 @@
         <h2 class="text-lg font-bold mb-4 text-gray-800">Active Thinkcar Coupons & Vouchers</h2>
         
         <!-- Coupon Card -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4 flex flex-col md:flex-row justify-between items-center gap-4 border-l-4 border-indigo-600">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4 flex flex-col md:flex-row justify-between items-center gap-4 border-l-4 border-indigo-600 hover:shadow-md transition">
             <div>
                 <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Verified Code: COUNTLESS</span>
-                <h3 class="text-lg font-bold text-gray-800 mt-1">25% Off, Sitewide Discounts & Extra $50 Off</h3>
+                <h3 class="text-lg font-bold text-gray-800 mt-1">25% Off, Sitewide Discounts & Extra \$50 Off</h3>
                 <p class="text-sm text-gray-600">Use coupon code on best diagnostic tools & car scanners for online purchasing. Get special sale prices & free shipping.</p>
             </div>
             <div>
                 <button onclick="revealCode('COUNTLESS', 'https://mythinkcar.com/discount/COUNTLESS?ref=xwhsvvsr')" 
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-md shadow flex items-center gap-2 text-sm">
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-md shadow flex items-center gap-2 text-sm transition">
                     <i class="fa-solid fa-scissors"></i> Get Code
                 </button>
             </div>
         </div>
 
-        <!-- Additional Info / Multilingual Keywords Section (SEO Optimization) -->
-        <div class="mt-8 bg-white rounded-lg p-6 border border-gray-200">
+        <!-- SEO Details Section -->
+        <div class="mt-8 bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
             <h3 class="text-md font-bold text-gray-800 mb-2">More Details About Thinkcar Deals</h3>
             <p class="text-xs text-gray-500 leading-relaxed">
-                Looking for Thinkcar Kortingscode, Kaufen, Kopen, Gutscheincode, Rabattcode, Voucher & Promo Codes? Apply code <strong>COUNTLESS</strong> at checkout to unlock maximum savings on top-tier automotive diagnostic scanners.
+                Looking for Thinkcar Kortingscode, Kaufen, Kopen, Gutscheincode, Rabattcode, Voucher & Promo Codes? Apply code <strong>COUNTLESS</strong> at checkout in <span class="auto-month-year font-medium"></span> to unlock maximum savings on top-tier automotive diagnostic scanners.
             </p>
         </div>
 
         <!-- FAQ Section -->
-        <div class="mt-6 bg-white rounded-lg p-6 border border-gray-200">
+        <div class="mt-6 bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
             <h3 class="text-lg font-bold text-gray-800 mb-4">Frequently Asked Questions</h3>
             <div class="space-y-4 text-sm text-gray-600">
                 <div>
@@ -76,18 +81,52 @@
         </div>
     </main>
 
-    <!-- Footer / Source Link -->
+    <!-- Footer -->
     <footer class="max-w-4xl mx-auto my-8 px-4 text-center text-xs text-gray-500">
-        <p>Explore more verified discounts and deals at <a href="https://revealcoupons.com/store/thinkcar-coupon-discount-promo-codes/" target="_blank" class="text-indigo-600 underline">RevealCoupons</a>.</p>
+        <p>Explore more verified discounts and deals at <a href="https://revealcoupons.com/store/thinkcar-coupon-discount-promo-codes/" target="_blank" class="text-indigo-600 underline hover:text-indigo-800">RevealCoupons</a>.</p>
     </footer>
 
-    <!-- JavaScript for Code Reveal & Redirect -->
+    <!-- JavaScript for Auto Month/Year (27th Rotation) & Code Reveal -->
     <script>
+        function updateMonthYear() {
+            const date = new Date();
+            let monthIndex = date.getMonth();
+            let year = date.getFullYear();
+
+            // Agar 27th date ya us se aage ho, toh agle month par switch kar de
+            if (date.getDate() >= 27) {
+                monthIndex++;
+                if (monthIndex > 11) {
+                    monthIndex = 0;
+                    year++;
+                }
+            }
+
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            const formattedDate = `${monthNames[monthIndex]} ${year}`;
+
+            // Text update karein
+            if (document.getElementById('current-date-text')) {
+                document.getElementById('current-date-text').innerText = formattedDate;
+            }
+            
+            document.querySelectorAll('.auto-month-year').forEach(el => {
+                el.innerText = formattedDate;
+            });
+        }
+
         function revealCode(code, affiliateUrl) {
             window.open(affiliateUrl, '_blank');
             navigator.clipboard.writeText(code);
             alert("Coupon Code Copied: " + code + "\nRedirecting to Thinkcar store...");
         }
+
+        // Script execute karein
+        updateMonthYear();
     </script>
 </body>
 </html>
