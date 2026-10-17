@@ -1,0 +1,18 @@
+[
+  {
+    "store": "Amazon",
+    "title": "Get 20% OFF on Electronics",
+    "description": "Exclusive discount code valid for consumer electronics.",
+    "code": "AMAZON20",
+    "affiliateUrl": "https://amazon.com/shop/revealcoupo0e",
+    "type": "code"
+  },
+  {
+    "store": "GTRacing",
+    "title": "Up to $50 OFF Gaming Chairs",
+    "description": "No promo code required. Click to activate deal.",
+    "code": "",
+    "affiliateUrl": "https://example.com/affiliate-link",
+    "type": "deal"
+  }
+]
