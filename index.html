@@ -6,7 +6,6 @@
     <title>CountlessCoupons - Best Promo Codes & Deals</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <meta name="google-site-verification" content="lto8707sH9Yg6ISIQ1lQPJOIjQY6jGMUHgwAu5hEcLA" />
 </head>
 <body class="bg-gray-50 font-sans">
 
@@ -18,55 +17,148 @@
 
     <!-- Main Container -->
     <main class="max-w-4xl mx-auto my-10 p-4">
-        <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-            <i class="fa-solid fa-tags text-indigo-600"></i> Active Promo Codes & Offers
-        </h2>
+        
+        <!-- Search & Info Bar -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <i class="fa-solid fa-tags text-indigo-600"></i> Active Promo Codes & Offers
+            </h2>
+            
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <!-- Search Input -->
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="search-input" oninput="filterPromos()" placeholder="Search store..." 
+                           class="w-full pl-9 pr-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600 shadow-sm">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                </div>
+                
+                <!-- Store Counter -->
+                <span id="total-stores" class="text-xs bg-indigo-100 text-indigo-800 font-bold px-3 py-1.5 rounded-full whitespace-nowrap shadow-sm">
+                    Loading...
+                </span>
+            </div>
+        </div>
         
         <!-- Promos Container -->
         <div id="promos-list" class="space-y-4">
             <!-- JavaScript will load promos here automatically -->
         </div>
+
+        <!-- Pagination Controls (Pages System) -->
+        <div id="pagination-container" class="flex justify-center items-center gap-2 mt-8">
+            <!-- Page Buttons will load here -->
+        </div>
+
     </main>
 
-    <!-- Script to Load Promo Codes Dynamically -->
+    <!-- Footer -->
+    <footer class="max-w-4xl mx-auto my-8 px-4 text-center text-xs text-gray-500">
+        <p>© 2026 CountlessCoupons. All rights reserved.</p>
+    </footer>
+
+    <!-- Script to Auto-Load, Search & Paginate Stores -->
     <script>
-        async function loadPromos() {
+        let allPromos = [];
+        let filteredPromos = [];
+        let currentPage = 1;
+        const itemsPerPage = 30; // 30 Stores Per Page Limit
+
+        async function fetchPromos() {
             try {
-                let response = await fetch('promo-codes.json');
-                let promos = await response.json();
-                let container = document.getElementById('promos-list');
+                // Fresh fetch to avoid browser cache
+                let response = await fetch('./promo-codes.json?v=' + new Date().getTime());
+                if (!response.ok) throw new Error("HTTP error! Status: " + response.status);
                 
-                container.innerHTML = "";
-
-                promos.forEach(promo => {
-                    let card = document.createElement('div');
-                    card.className = "bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row justify-between items-center transition hover:shadow-md";
-
-                    card.innerHTML = `
-                        <div class="mb-4 md:mb-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-0.5 rounded uppercase">${promo.storeName}</span>
-                                <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">${promo.badge}</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 mt-1">${promo.title}</h3>
-                            <p class="text-sm text-gray-600 mt-1">${promo.description}</p>
-                        </div>
-                        <div>
-                            <a href="${promo.slug}" 
-                               class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow inline-flex items-center gap-2 text-sm whitespace-nowrap">
-                                Get Code <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    `;
-
-                    container.appendChild(card);
-                });
+                allPromos = await response.json();
+                filteredPromos = [...allPromos];
+                
+                renderPage();
             } catch (error) {
                 console.error("Error loading promos:", error);
+                document.getElementById('promos-list').innerHTML = `<p class="text-gray-500 text-sm">Failed to load promos.</p>`;
             }
         }
 
-        loadPromos();
+        function renderPage() {
+            let container = document.getElementById('promos-list');
+            let totalCounter = document.getElementById('total-stores');
+            
+            totalCounter.innerText = filteredPromos.length + " Stores Active";
+            container.innerHTML = "";
+
+            if (filteredPromos.length === 0) {
+                container.innerHTML = `<div class="bg-white p-6 rounded-lg text-center text-gray-500 text-sm">No promo codes found matching your search.</div>`;
+                document.getElementById('pagination-container').innerHTML = "";
+                return;
+            }
+
+            // Calculate start and end index for Pagination
+            let startIndex = (currentPage - 1) * itemsPerPage;
+            let endIndex = startIndex + itemsPerPage;
+            let pagePromos = filteredPromos.slice(startIndex, endIndex);
+
+            pagePromos.forEach(promo => {
+                let card = document.createElement('div');
+                card.className = "bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row justify-between items-center transition hover:shadow-md";
+
+                card.innerHTML = `
+                    <div class="mb-4 md:mb-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-0.5 rounded uppercase">${promo.storeName}</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">${promo.badge}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mt-1">${promo.title}</h3>
+                        <p class="text-sm text-gray-600 mt-1">${promo.description}</p>
+                    </div>
+                    <div>
+                        <a href="${promo.slug}" 
+                           class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-md shadow inline-flex items-center gap-2 text-sm whitespace-nowrap transition">
+                            Get Code <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            renderPaginationControls();
+        }
+
+        function renderPaginationControls() {
+            let totalPages = Math.ceil(filteredPromos.length / itemsPerPage);
+            let paginationContainer = document.getElementById('pagination-container');
+            paginationContainer.innerHTML = "";
+
+            if (totalPages <= 1) return; // Hide pagination if 1 or less pages
+
+            for (let i = 1; i <= totalPages; i++) {
+                let btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `px-3.5 py-1.5 text-xs font-bold rounded-md border transition ${
+                    i === currentPage 
+                    ? 'bg-indigo-600 text-white border-indigo-600' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                }`;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderPage();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                paginationContainer.appendChild(btn);
+            }
+        }
+
+        function filterPromos() {
+            let query = document.getElementById('search-input').value.toLowerCase();
+            filteredPromos = allPromos.filter(promo => 
+                promo.storeName.toLowerCase().includes(query) || 
+                promo.title.toLowerCase().includes(query) ||
+                promo.description.toLowerCase().includes(query)
+            );
+            currentPage = 1;
+            renderPage();
+        }
+
+        fetchPromos();
     </script>
 </body>
 </html>
