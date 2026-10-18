@@ -1,6 +1,6 @@
 name: Generate Sitemap
 
-on:
+workflow_dispatch:
   push:
     paths:
       - 'promo-codes.json'
