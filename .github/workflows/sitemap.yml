@@ -1,0 +1,58 @@
+name: Generate Sitemap
+
+on:
+  push:
+    paths:
+      - 'promo-codes.json'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Generate sitemap.xml
+        run: |
+          node -e '
+          const fs = require("fs");
+          const promos = JSON.parse(fs.readFileSync("promo-codes.json", "utf8"));
+          
+          let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+          xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+          
+          // Homepage
+          xml += `  <url>\n`;
+          xml += `    <loc>https://countlesscoupons.github.io/promo-codes/</loc>\n`;
+          xml += `    <changefreq>daily</changefreq>\n`;
+          xml += `    <priority>1.0</priority>\n`;
+          xml += `  </url>\n`;
+          
+          // Dynamic Stores from promo-codes.json
+          promos.forEach(p => {
+            xml += `  <url>\n`;
+            xml += `    <loc>https://countlesscoupons.github.io/promo-codes/${p.slug}</loc>\n`;
+            xml += `    <changefreq>weekly</changefreq>\n`;
+            xml += `    <priority>0.8</priority>\n`;
+            xml += `  </url>\n`;
+          });
+          
+          xml += `</urlset>`;
+          fs.writeFileSync("sitemap.xml", xml);
+          console.log("Sitemap generated successfully!");
+          '
+
+      - name: Commit and push sitemap if changed
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add sitemap.xml
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generate sitemap.xml via GitHub Action" && git push)
