@@ -1,6 +1,7 @@
 name: Generate Sitemap
 
-workflow_dispatch:
+on:
+  workflow_dispatch:
   push:
     paths:
       - 'promo-codes.json'
@@ -24,35 +25,42 @@ jobs:
         run: |
           node -e '
           const fs = require("fs");
-          const promos = JSON.parse(fs.readFileSync("promo-codes.json", "utf8"));
-          
-          let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-          xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-          
-          // Homepage
-          xml += `  <url>\n`;
-          xml += `    <loc>https://countlesscoupons.github.io/promo-codes/</loc>\n`;
-          xml += `    <changefreq>daily</changefreq>\n`;
-          xml += `    <priority>1.0</priority>\n`;
-          xml += `  </url>\n`;
-          
-          // Dynamic Stores from promo-codes.json
-          promos.forEach(p => {
-            xml += `  <url>\n`;
-            xml += `    <loc>https://countlesscoupons.github.io/promo-codes/${p.slug}</loc>\n`;
-            xml += `    <changefreq>weekly</changefreq>\n`;
-            xml += `    <priority>0.8</priority>\n`;
-            xml += `  </url>\n`;
-          });
-          
-          xml += `</urlset>`;
-          fs.writeFileSync("sitemap.xml", xml);
-          console.log("Sitemap generated successfully!");
+          try {
+            const rawData = fs.readFileSync("promo-codes.json", "utf8");
+            const promos = JSON.parse(rawData);
+            
+            let xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+            xml += "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
+            
+            xml += "  <url>\n";
+            xml += "    <loc>https://countlesscoupons.github.io/promo-codes/</loc>\n";
+            xml += "    <changefreq>daily</changefreq>\n";
+            xml += "    <priority>1.0</priority>\n";
+            xml += "  </url>\n";
+            
+            promos.forEach(p => {
+              if(p.slug) {
+                xml += "  <url>\n";
+                xml += "    <loc>https://countlesscoupons.github.io/promo-codes/" + p.slug + "</loc>\n";
+                xml += "    <changefreq>weekly</changefreq>\n";
+                xml += "    <priority>0.8</priority>\n";
+                xml += "  </url>\n";
+              }
+            });
+            
+            xml += "</urlset>";
+            fs.writeFileSync("sitemap.xml", xml);
+            console.log("Sitemap generated successfully!");
+          } catch (err) {
+            console.error("Error building sitemap:", err);
+            process.exit(1);
+          }
           '
 
-      - name: Commit and push sitemap if changed
+      - name: Commit and push sitemap
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generate sitemap.xml via GitHub Action" && git push)
+          git commit -m "Auto-generate sitemap.xml" || exit 0
+          git push
