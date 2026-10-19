@@ -123,9 +123,7 @@
             </div>
         </div>
 
-        <!-- COMPREHENSIVE SEO CONTENT SECTION FOR ALL FITCAMX SEARCH QUERIES -->
-        
-        <!-- Section 1: Vehicle Compatibility & Model Breakdown -->
+        <!-- SEO CONTENT SECTION FOR FITCAMX SEARCH QUERIES -->
         <div class="bg-white rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm mb-8 space-y-6">
             <h2 class="text-xl font-bold text-gray-900 border-b pb-3">Fitcamx Dash Cams Vehicle Compatibility & Models</h2>
             
@@ -173,7 +171,7 @@
 
                 <div>
                     <h3 class="font-bold text-gray-800 text-base">Fitcamx Kortingscode & Kopen (Netherlands / Belgium)</h3>
-                    <p>Vind de beste Fitcamx kortingscodes voor het kopen van geïntegreerde autocamera's zonder losse kabels. Bespaar direct op u voorste en achterste dashcam sets.</p>
+                    <p>Vind de beste Fitcamx kortingscodes voor het kopen van geïntegreerde autocamera's zonder losse kabels. Bespaar direct op uw voorste en achterste dashcam sets.</p>
                 </div>
             </div>
         </div>
@@ -206,27 +204,22 @@
 
     <!-- JavaScript Logic for Click-to-Reveal & Date Rotation -->
     <script>
-        // Reveal Code & Redirect Function
         function revealCodeAndRedirect(couponId, actualCode, affiliateUrl) {
-            // 1. Reveal badge text
             const badgeElement = document.getElementById('badge-code-' + couponId);
             if (badgeElement) {
                 badgeElement.innerText = "Verified Code: " + actualCode;
                 badgeElement.classList.add('revealed');
             }
 
-            // 2. Auto Copy Code
             if (actualCode) {
                 navigator.clipboard.writeText(actualCode);
             }
 
-            // 3. Open affiliate link in new tab for 100% sale tracking
             if (affiliateUrl) {
                 window.open(affiliateUrl, '_blank');
             }
         }
 
-        // Auto Month/Year 27th Date Rotation Script
         function updateMonthYear() {
             const date = new Date();
             let monthIndex = date.getMonth();
