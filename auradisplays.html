@@ -191,6 +191,8 @@
             text-align: center;
             white-space: nowrap;
             transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .coupon-btn:hover {
@@ -293,7 +295,7 @@
                     <h3>Extra $20 Off On All Orders $100 Or More</h3>
                     <p>Apply promo code COUNTLESS at checkout on portable monitors, dual screens, and triple laptop extenders.</p>
                 </div>
-                <button class="coupon-btn" onclick="copyCode('COUNTLESS', this)">Code: COUNTLESS</button>
+                <button class="coupon-btn" onclick="copyAndRedirect('COUNTLESS', 'https://auradisplays.com/?sca_ref=8993850.z1p6HjG878', this)">Code: COUNTLESS</button>
             </div>
 
             <div class="coupon-card">
@@ -301,7 +303,7 @@
                     <h3>Extra $10 Off On All Orders Sitewide</h3>
                     <p>Click to unmask and auto-copy hidden affiliate code for $10 instant markdown on tech orders.</p>
                 </div>
-                <button class="coupon-btn" onclick="revealCode('AURA10', this)">🔒 Click to Reveal Code</button>
+                <button class="coupon-btn" onclick="copyAndRedirect('COUNTLESS', 'https://auradisplays.com/?sca_ref=8993850.z1p6HjG878', this)">🔒 Click to Reveal Code</button>
             </div>
 
             <div class="coupon-card">
@@ -309,7 +311,7 @@
                     <h3>20% Off Sitewide Sale On All Tech Displays</h3>
                     <p>Maximize multi-screen remote workstation savings on triple, dual, and single portable laptop monitors.</p>
                 </div>
-                <button class="coupon-btn" onclick="window.open('https://aura-displays.com', '_blank')">Get Deal</button>
+                <a href="https://auradisplays.com/?sca_ref=8993850.z1p6HjG878" target="_blank" rel="nofollow sponsored" class="coupon-btn">Get Deal</a>
             </div>
 
         </section>
@@ -397,22 +399,15 @@
 
     <!-- Interactive Scripts -->
     <script>
-        // Copy Code Functionality
-        function copyCode(code, element) {
-            navigator.clipboard.writeText(code);
-            element.innerText = "Copied: " + code;
-            element.style.backgroundColor = "#16a34a";
-            setTimeout(() => {
-                element.innerText = "Code: " + code;
-                element.style.backgroundColor = "";
-            }, 3000);
-        }
-
-        // Reveal Code Functionality
-        function revealCode(code, element) {
+        // Copy Code and Open Affiliate Link
+        function copyAndRedirect(code, affiliateUrl, element) {
+            // Copy Code
             navigator.clipboard.writeText(code);
             element.innerText = "Code: " + code + " (Copied!)";
             element.style.backgroundColor = "#16a34a";
+
+            // Redirect to Affiliate Link in New Tab
+            window.open(affiliateUrl, '_blank');
         }
 
         // Auto Detect Country/Region for Empty Spans
